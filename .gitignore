@@ -2,3 +2,4 @@ __pycache__
 .DS_Store
 .snakemake/
 sirius_annotation/results/
+**/input/

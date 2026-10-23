@@ -33,26 +33,26 @@ run_sirius() {
 		return 2
 	fi
 
-	mkdir -p "$out_dir"
+	mkdir -p "$out_dir/$(basename "$in" ".mgf")"
 
 	sirius\
 	 --input "$in" \
 	 --ignore-formula \
 	 --threads "$threads" \
-	 --project "$out_dir/$(basename "$in" ".mgf")/$(basename "$in" ".mgf").sirius" \
 	 --mzmax=850 \
+	 --project "$out_dir/$(basename "$in" ".mgf")/$(basename "$in" ".mgf").sirius" \
 	 config \
 	 --AlgorithmProfile=qtof\
 	 --MS2MassDeviation.allowedMassDeviation=10.0ppm \
 	 --SpectralSearchDB=METACYC,BloodExposome,CHEBI,COCONUT,FooDB,GNPS,HMDB,HSDB,KEGG,KNAPSACK,LOTUS,LIPIDMAPS,MACONDA,MESH,MiMeDB,NORMAN,PLANTCYC,PUBCHEMANNOTATIONBIO,PUBCHEMANNOTATIONDRUG,PUBCHEMANNOTATIONFOOD,PUBCHEMANNOTATIONSAFETYANDTOXIC,SUPERNATURAL,TeroMol,YMDB \
-	 --AdductSettings.fallback=[[M+H]+,[M+Na]+,[M+K]+] \
+	 --AdductSettings.fallback=[[M+H]+,[M+Na]+,[M+K]+,[M-H]-] \
 	 --FormulaSettings.enforced=H,C,N,O,P \
 	 --IdentitySearchSettings.precursorDeviation=20.0ppm \
 	 --FormulaSearchSettings.performBottomUpAboveMz=0 \
-	 formulas fingerprints classes structures write-summaries \
+	 spectra-search formulas -c 50 zodiac fingerprints classes structures denovo-structures write-summaries \
 	 --output "$out_dir/$(basename "$in" ".mgf")"
 }
 
-if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then	
 	run_sirius "$@"
 fi
